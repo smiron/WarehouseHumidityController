@@ -10,8 +10,8 @@
 #define HUMIDITY_TIME_SLICES_MEASURE  4
 #define BLINKLED_TIME_SLICES_MEASURE  1
 
-#define HUMIDITY_MIN  85
-#define HUMIDITY_MAX  90
+#define HUMIDITY_MIN  90
+#define HUMIDITY_MAX  93
 
 bool relayState = false;
 int humidityTimeSliceCurrent = 0;
