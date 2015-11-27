@@ -80,6 +80,8 @@ void measureHumidity(){
     return;
   }
 
+  lcd.clear();
+
   if (relayState) {
     if (humidity > HUMIDITY_MAX) {
       digitalWrite(RELAY1_PIN, RELAY_OFF);
@@ -93,7 +95,12 @@ void measureHumidity(){
     }
   }
 
-  lcd.clear();
+  if (relayState) {
+    lcd.setCursor(15, 0);
+    lcd.print("+");
+  }
+
+  
   lcd.setCursor(0, 0);
   lcd.print("H20:  ");
   lcd.print(humidity, 2);
