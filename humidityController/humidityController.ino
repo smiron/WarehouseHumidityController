@@ -1,7 +1,11 @@
+#include <Wire.h>
+#include <LCD.h>
+#include <LiquidCrystal.h>
 #include <DHT.h>
+#include <LiquidCrystal_I2C.h>
 
 #define DHT_TYPE      DHT22
-#define DHT_PIN       2
+#define DHT_PIN       4
 #define RELAY1_PIN    7
 #define RELAY_OFF     1
 #define RELAY_ON      0
@@ -13,6 +17,8 @@
 #define HUMIDITY_MIN  90
 #define HUMIDITY_MAX  93
 
+LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+
 bool relayState = false;
 int humidityTimeSliceCurrent = 0;
 int blickLedTimeSliceCurrent = 0;
@@ -20,10 +26,17 @@ int blickLedTimeSliceCurrent = 0;
 DHT dht(DHT_PIN, DHT_TYPE);
 
 void setup() {
+  
   Serial.begin(9600);
-  pinMode(RELAY1_PIN, OUTPUT);
-
   dht.begin();
+  
+  lcd.begin(16, 2);
+  lcd.clear();
+  lcd.backlight();
+  lcd.print("Se porneste ...");  
+
+  pinMode(RELAY1_PIN, OUTPUT);
+  digitalWrite(RELAY1_PIN, RELAY_OFF);
 }
 
 void loop() {
@@ -80,12 +93,16 @@ void measureHumidity(){
     }
   }
 
-  Serial.print("Humidity: ");
-  Serial.print(humidity);
-  Serial.print(" %\t");
-  Serial.print("Temperature: ");
-  Serial.print(temperature);
-  Serial.print(" *C \t");
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("H20:  ");
+  lcd.print(humidity, 2);
+  lcd.print("%");
+
+  lcd.setCursor(0, 1);
+  lcd.print("Temp: ");
+  lcd.print(temperature, 2);
+  lcd.print("C");
 
   Serial.print("Humidity: ");
   Serial.println(relayState ? "ON" : "OFF");
